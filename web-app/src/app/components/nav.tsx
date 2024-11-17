@@ -1,4 +1,9 @@
+"use client"
 import Link from 'next/link'
+import Switch from './switch';
+import { useEffect } from 'react';
+import { usePathname } from 'next/navigation';
+import clsx from 'clsx';
 
 const NAV_LINKS: Array<{text: string, route: string}> = [
     {
@@ -21,13 +26,21 @@ const NAV_LINKS: Array<{text: string, route: string}> = [
 ]
 
 export default function Nav() {
+    const pathname = usePathname()
+    useEffect(() => {
+        document.documentElement.classList.toggle(
+            'dark',
+            localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
+        )
+    }, [])
+
     return (
-        <div className="w-full flex justify-end py-8 px-16">
-            <nav>
+        <div className="w-full flex justify-between py-4 px-16 bg-neutral-200 dark:bg-slate-800 absolute top-0 border-b-[1px] border-gray-300 dark:border-sky-400">
+            <nav className='mr-8 flex items-center'>
                 <ul className='flex gap-8'>
                     {NAV_LINKS.map(({text, route}) => (
                             <li key={text}>
-                                <Link href={route} className='text-gray-900 dark:text-slate-50 font-semibold hover:text-orange-500 text-xl'>
+                                <Link href={route} className={clsx('text-gray-900 dark:text-slate-50 font-semibold hover:text-sky-600 text-xl', {'text-sky-400 dark:text-sky-400': pathname === route})}>
                                     {text}
                                 </Link>
                             </li>
@@ -35,6 +48,17 @@ export default function Nav() {
                     )}
                 </ul>
             </nav>
+            <Switch checked={false} onChange={(isDarkMode) => {
+                if (isDarkMode) {
+                    localStorage.theme = 'dark'
+                } else {
+                    localStorage.theme = 'light'
+                }
+                document.documentElement.classList.toggle(
+                    'dark',
+                    localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
+                )
+            }}/>
         </div>
     );
 }
