@@ -1,7 +1,5 @@
 "use client"
 import Link from 'next/link'
-import Switch from './switch';
-import { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
 
@@ -27,12 +25,12 @@ const NAV_LINKS: Array<{text: string, route: string}> = [
 
 export default function Nav() {
     const pathname = usePathname()
-    useEffect(() => {
-        document.documentElement.classList.toggle(
-            'dark',
-            localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
-        )
-    }, [])
+    // useEffect(() => {
+    //     document.documentElement.classList.toggle(
+    //         'dark',
+    //         localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
+    //     )
+    // }, [])
 
     return (
         <div className="w-full flex justify-between py-4 px-16 bg-neutral-200 dark:bg-slate-800 absolute top-0 border-b-[1px] border-gray-300 dark:border-sky-400">
@@ -40,7 +38,7 @@ export default function Nav() {
                 <ul className='flex gap-8'>
                     {NAV_LINKS.map(({text, route}) => (
                             <li key={text}>
-                                <Link href={route} className={clsx('text-gray-900 dark:text-slate-50 font-semibold hover:text-sky-600 text-xl', {'text-sky-400 dark:text-sky-400': pathname === route})}>
+                                <Link href={route} className={clsx('font-semibold hover:text-sky-600 text-xl', { 'text-sky-400 dark:text-sky-400': pathname === route, 'text-gray-900 dark:text-slate-50': pathname !== route })}>
                                     {text}
                                 </Link>
                             </li>
@@ -48,7 +46,7 @@ export default function Nav() {
                     )}
                 </ul>
             </nav>
-            <Switch checked={false} onChange={(isDarkMode) => {
+            {/* <Switch checked={false} onChange={(isDarkMode) => {
                 if (isDarkMode) {
                     localStorage.theme = 'dark'
                 } else {
@@ -58,7 +56,7 @@ export default function Nav() {
                     'dark',
                     localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
                 )
-            }}/>
+            }}/> */}
         </div>
     );
 }

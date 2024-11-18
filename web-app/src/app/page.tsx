@@ -1,7 +1,6 @@
 import Image from "next/image";
 import P from "./components/typography/p";
 import H1 from "./components/typography/h1";
-import Link from "next/link";
 
 export default function Home() {
   return (
